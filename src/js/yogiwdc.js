@@ -36,7 +36,7 @@
             }
 
             var alias = data.post_meta[keys[i]].alias
-            keys[i] = keys[i].replaceAll(' ', '_') //replace all
+            keys[i] = keys[i].replace(/ /g, '_') //replace all
 
             cols[i] = {
               id: keys[i],
@@ -70,7 +70,7 @@
               type = "string"
             }
             var alias = data.theme_meta[keys1[i]].alias
-            keys1[i] = keys1[i].replaceAll(' ', '_')
+            keys1[i] = keys1[i].replace(/ /g, '_')
 
             cols1[i] = {
               id: keys1[i],
@@ -135,7 +135,7 @@
           for(var i = 0; i < 50; i++) { //change from # to data.posts.length
             var details = data.posts[i];
             for(var j = 0; j < keys.length; j++) {
-              var key = keys[j].replaceAll(' ', '_')
+              var key = keys[j].replace(/ /g, '_')
               tableRow[key] = details[keys[j]]
             }
             tableData = []
@@ -148,7 +148,7 @@
           for(var l = 0; l < 15; l++) { //change from # to data.themes.length
             var details = data.themes[l]
             for(var k = 0; k < keys1.length; k++) {
-              var key = keys1[k].replaceAll(' ', '_')
+              var key = keys1[k].replace(/ /g, '_')
               tableRow[key] = details[keys1[k]]
             }
             tableData = []
