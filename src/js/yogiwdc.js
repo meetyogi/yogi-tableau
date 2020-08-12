@@ -38,7 +38,7 @@
             }
 
             var alias = data.post_meta[keys[i]].alias
-            keys[i] = keys[i].replace(/ /g, '_') // "/ /g" means replace globally, works better than replace all
+            keys[i] = keys[i].replace(/ /g, '_') 
 
             cols[i] = {
               id: keys[i],
@@ -138,7 +138,7 @@
         var length = data.posts.length
         var length1 = data.themes.length
         if(table.tableInfo.id == "yogi_posts") {
-          for(var i = 0; i < length; i++) { //change from # to data.posts.length
+          for(var i = 0; i < length; i++) {
             var details = data.posts[i];
             for(var j = 0; j < keys.length; j++) {
               var key = keys[j].replace(/ /g, '_')
@@ -153,7 +153,7 @@
           }
         }
         else if(table.tableInfo.id == "yogi_themes") {
-          for(var l = 0; l < length1; l++) { //change from # to data.themes.length
+          for(var l = 0; l < length1; l++) {
             var details = data.themes[l]
             for(var k = 0; k < keys1.length; k++) {
               var key = keys1[k].replace(/ /g, '_')
@@ -180,10 +180,10 @@
     // Create event listeners for when the user submits the form
     $(document).ready(function() {
         $("#submitButton").click(function() {
-            tableau.connectionName = "Yogi Connector"; // This will be the data source name in Tableau
+            tableau.connectionName = "Yogi Connector";
             var key = $("#key").val();
             tableau.connectionData = key;
-            tableau.submit(); // This sends the connector object to Tableau
+            tableau.submit();
         });
     });
 })();
