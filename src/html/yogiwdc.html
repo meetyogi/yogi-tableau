@@ -14,16 +14,37 @@
 <body>
     <div class="container container-table">
         <div class="row vertical-center-row">
-            <div class="text-center col-md-4 col-md-offset-4">
-                <input type = "text" id = "key" placeholder = "Enter Your API Key">
+            <div style="text-align: center; margin-top: 180px;">
+                <input type = "text" id = "key" placeholder = "Enter Your API Key" style = "width:500px;">
                 <button type = "button" id = "submitButton" class = "btn btn-success" style = "margin: 10px;">Get My Yogi Data!</button>
             </div>
         </div>
+        <style>
+        @import url('http://getbootstrap.com/dist/css/bootstrap.css');
+        html, body, .container-table {
+          height: 100%;
+        }
+        .container-table {
+          display: table;
+        }
+        .vertical-center-row {
+          display: table-cell;
+          vertical-align: middle;
+        }
+        </style>
     </div>
     <div class="container container-table">
         <div class="row vertical-center-row">
-            <div class="text-center col-md-2 col-md-offset-2">
+            <div style="text-align: center; margin-top: 30px;">
               <img src = "yogi.png">
+              <style>
+                  img {
+                    width: 25%;
+                  }
+                  .container-table{
+                    height: 20%;
+                  }
+              </style>
             </div>
         </div>
     </div>

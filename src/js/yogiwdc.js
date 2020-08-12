@@ -3,7 +3,8 @@
     var myConnector = tableau.makeConnector();
     // Define the schema
     myConnector.getSchema = function(schemaCallback) {
-      var url = "https://api-dev.meetyogi.com/post/feed" //change to api
+      //Get the json response
+      var url = "https://api.meetyogi.com/post/feed"
       var request = $.ajax({
           url: url,
           type: "GET",
@@ -15,6 +16,7 @@
       })
 
       request.done(function(data) {
+          //Create Post Columns
           var keys = Object.keys(data.post_meta)
           var cols = []
           for(var i = 0; i < keys.length; i++) {
@@ -36,7 +38,7 @@
             }
 
             var alias = data.post_meta[keys[i]].alias
-            keys[i] = keys[i].replace(/ /g, '_') //replace all
+            keys[i] = keys[i].replace(/ /g, '_') // "/ /g" means replace globally, works better than replace all
 
             cols[i] = {
               id: keys[i],
@@ -50,6 +52,7 @@
               columns: cols
           };
 
+          //Create Themes Columns
           var keys1 = Object.keys(data.theme_meta)
           var cols1 = []
           for(var i = 0; i < keys1.length; i++) {
@@ -84,6 +87,7 @@
               columns: cols1
           };
 
+          //Create Left Join for Posts and Themes
           var standardConnection = {
             "alias": "Joined Yogi Posts and Themes data",
             "tables": [{
@@ -108,6 +112,7 @@
 
         schemaCallback([tableSchema, tableSchema1], [standardConnection]);
       });
+      //If can't pull JSON response
       request.fail(function(data) {
           alert("Failure, Please re-enter the Project Token or reach out to Yogi Support")
       })
@@ -115,7 +120,8 @@
 
     // Download the data
     myConnector.getData = function(table, doneCallback) {
-      var url = "https://api-dev.meetyogi.com/post/feed" //change to api
+      var url = "https://api.meetyogi.com/post/feed"
+      //Get the json response
       var request = $.ajax({
           url: url,
           type: "GET",
@@ -132,7 +138,7 @@
         var length = data.posts.length
         var length1 = data.themes.length
         if(table.tableInfo.id == "yogi_posts") {
-          for(var i = 0; i < 50; i++) { //change from # to data.posts.length
+          for(var i = 0; i < length; i++) { //change from # to data.posts.length
             var details = data.posts[i];
             for(var j = 0; j < keys.length; j++) {
               var key = keys[j].replace(/ /g, '_')
@@ -141,11 +147,13 @@
             tableData = []
             tableData.push(tableRow)
             table.appendRows(tableData);
-            tableau.reportProgress("Getting row: " + (i+1)) //every 100 rows
+            if((i+1) % 100 == 0) {
+              tableau.reportProgress("Getting row: " + (i+1))
+            }
           }
         }
         else if(table.tableInfo.id == "yogi_themes") {
-          for(var l = 0; l < 15; l++) { //change from # to data.themes.length
+          for(var l = 0; l < length1; l++) { //change from # to data.themes.length
             var details = data.themes[l]
             for(var k = 0; k < keys1.length; k++) {
               var key = keys1[k].replace(/ /g, '_')
@@ -154,12 +162,13 @@
             tableData = []
             tableData.push(tableRow)
             table.appendRows(tableData);
-            tableau.reportProgress("Getting row: " + (l+1)) //every 100 rows
+            if((l+1) % 100 == 0) {
+              tableau.reportProgress("Getting row: " + (l+1))
+            }
           }
         }
 
       })
-
       request.fail(function(data) {
           alert("Failure, Please re-enter the Project Token or reach out to Yogi Support")
       })
