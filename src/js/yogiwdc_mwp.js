@@ -61,15 +61,6 @@
       var post_keys = Object.keys(data.posts[0]);
       var post_length = data.posts.length;
 
-      //rename keys from data to match schema formatting
-      var post_keys_renamed = post_keys.map((key) => {
-        key = key.replace(/ /g, "_");
-        return key.replace(/-/g, "_");
-      });
-      var theme_keys_renamed = theme_keys.map((key) => {
-        key = key.replace(/ /g, "_");
-        return key.replace(/-/g, "_");
-      });
       console.log("made it to data population");
 
       if (table.tableInfo.id == "yogi_posts") {
