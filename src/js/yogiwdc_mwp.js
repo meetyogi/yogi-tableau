@@ -87,7 +87,8 @@
         "Failure, Please re-enter the Project Token or reach out to Yogi Support"
       );
     });
-    doneCallback();
+    
+    if (table.tableInfo.id == "yogi_posts") doneCallback();
   };
 
   tableau.registerConnector(myConnector);
