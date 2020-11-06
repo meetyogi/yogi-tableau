@@ -80,6 +80,8 @@
       );
       console.log(table.tableInfo);
       console.log("finished populating the table");
+
+      doneCallback();
     });
 
     request.fail(function (data) {
@@ -87,8 +89,6 @@
         "Failure, Please re-enter the Project Token or reach out to Yogi Support"
       );
     });
-    
-    if (table.tableInfo.id == "yogi_posts") doneCallback();
   };
 
   tableau.registerConnector(myConnector);

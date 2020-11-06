@@ -158,10 +158,8 @@
         key = key.replace(/ /g, "_");
         return key.replace(/-/g, "_");
       });
-      console.log("made it to data population");
 
       if (table.tableInfo.id == "yogi_posts") {
-        console.log("made it to theme");
         for (var i = 0; i < post_length; i++) {
           var post_row = data.posts[i];
           var tableRow = {};
@@ -173,7 +171,6 @@
           tableData.push(tableRow);
         }
       } else if (table.tableInfo.id == "yogi_themes") {
-        console.log("made it to theme");
         for (var i = 0; i < theme_length; i++) {
           var theme_row = data.themes[i];
           var tableRow = {};
@@ -189,7 +186,6 @@
       //Append table rows in size of 1000 at a time to avoid overwhelming pipeline
       var row_index = 0;
       var size = 1000;
-      console.log("made it to data appending");
       while (row_index < tableData.length) {
         table.appendRows(tableData.slice(row_index, size + row_index));
         tableau.reportProgress(
@@ -197,6 +193,7 @@
         );
         row_index += size;
       }
+      doneCallback();
     });
 
     request.fail(function (data) {
@@ -204,7 +201,6 @@
         "Failure, Please re-enter the Project Token or reach out to Yogi Support"
       );
     });
-    doneCallback();
   };
 
   tableau.registerConnector(myConnector);
