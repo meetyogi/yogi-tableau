@@ -37,8 +37,7 @@
         }
 
         var alias = data.post_meta[post_keys[i]].alias;
-        post_keys[i] = post_keys[i].replace(/ /g, "_");
-        post_keys[i] = post_keys[i].replace(/-/g, "_");
+        post_keys[i] = post_keys[i].replace(/\W/g, "_");
 
         post_columns[i] = {
           id: post_keys[i],
@@ -73,8 +72,7 @@
           type = "string";
         }
         var alias = data.theme_meta[theme_keys[i]].alias;
-        theme_keys[i] = theme_keys[i].replace(/ /g, "_");
-        theme_keys[i] = theme_keys[i].replace(/-/g, "_");
+        theme_keys[i] = theme_keys[i].replace(/\W/g, "_");
 
         theme_columns[i] = {
           id: theme_keys[i],
@@ -151,12 +149,10 @@
 
       //rename keys from data to match schema formatting
       var post_keys_renamed = post_keys.map((key) => {
-        key = key.replace(/ /g, "_");
-        return key.replace(/-/g, "_");
+        return key.replace(/\W/g, "_");
       });
       var theme_keys_renamed = theme_keys.map((key) => {
-        key = key.replace(/ /g, "_");
-        return key.replace(/-/g, "_");
+        return key.replace(/\W/g, "_");
       });
 
       if (table.tableInfo.id == "yogi_posts") {
