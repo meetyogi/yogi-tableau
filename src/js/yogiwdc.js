@@ -37,7 +37,6 @@
         }
 
         var alias = data.post_meta[post_keys[i]].alias;
-        post_keys[i] = post_keys[i].replace(/\W/g, "_");
 
         post_columns[i] = {
           id: post_keys[i],
@@ -72,8 +71,7 @@
           type = "string";
         }
         var alias = data.theme_meta[theme_keys[i]].alias;
-        theme_keys[i] = theme_keys[i].replace(/\W/g, "_");
-
+ 
         theme_columns[i] = {
           id: theme_keys[i],
           alias: alias,
@@ -147,22 +145,12 @@
       var post_length = data.posts.length;
       var theme_length = data.themes.length;
 
-      //rename keys from data to match schema formatting
-      var post_keys_renamed = post_keys.map((key) => {
-        return key.replace(/\W/g, "_");
-      });
-      var theme_keys_renamed = theme_keys.map((key) => {
-        return key.replace(/\W/g, "_");
-      });
-
       if (table.tableInfo.id == "yogi_posts") {
         for (var i = 0; i < post_length; i++) {
           var post_row = data.posts[i];
           var tableRow = {};
-
           for (var j = 0; j < post_keys.length; j++) {
-            //renamed key (which should match schema) is given its correspoding value
-            tableRow[post_keys_renamed[j]] = post_row[post_keys[j]];
+            tableRow[post_keys[j]] = post_row[post_keys[j]];
           }
           tableData.push(tableRow);
         }
@@ -170,10 +158,8 @@
         for (var i = 0; i < theme_length; i++) {
           var theme_row = data.themes[i];
           var tableRow = {};
-
           for (var j = 0; j < theme_keys.length; j++) {
-            //renamed key is given its corresponding value
-            tableRow[theme_keys_renamed[j]] = theme_row[theme_keys[j]];
+            tableRow[theme_keys[j]] = theme_row[theme_keys[j]];
           }
           tableData.push(tableRow);
         }
