@@ -8,7 +8,12 @@
     var request = $.ajax({
       url: url,
       type: "GET",
-      data: { connector: "tableau" },
+      data: {
+        connector: "tableau" ,
+        get_theme_sentiments: false,
+        get_post_keywords: false,
+        get_post_sentiment_info: false,
+      },
       contentType: "application/json; charset=utf-8",
       beforeSend: function (request) {
         request.setRequestHeader("Authorization", tableau.connectionData);
@@ -51,71 +56,75 @@
         columns: post_columns,
       };
 
-      //Create Themes Columns
-      var theme_keys = Object.keys(data.theme_meta);
-      var theme_columns = [];
-      for (var i = 0; i < theme_keys.length; i++) {
-        var type = "";
-        if (
-          data.theme_meta[theme_keys[i]].type == "str" ||
-          data.theme_meta[theme_keys[i]].type == "mixed"
-        ) {
-          type = "string";
-        } else if (data.theme_meta[theme_keys[i]].type == "date") {
-          type = "date";
-        } else if (data.theme_meta[theme_keys[i]].type == "float") {
-          type = "float";
-        } else if (data.theme_meta[theme_keys[i]].type == "int") {
-          type = "int";
-        } else {
-          type = "string";
+      if (data.theme_meta) {
+        //Create Themes Columns
+        var theme_keys = Object.keys(data.theme_meta);
+        var theme_columns = [];
+        for (var i = 0; i < theme_keys.length; i++) {
+          var type = "";
+          if (
+              data.theme_meta[theme_keys[i]].type === "str" ||
+              data.theme_meta[theme_keys[i]].type === "mixed"
+          ) {
+            type = "string";
+          } else if (data.theme_meta[theme_keys[i]].type === "date") {
+            type = "date";
+          } else if (data.theme_meta[theme_keys[i]].type === "float") {
+            type = "float";
+          } else if (data.theme_meta[theme_keys[i]].type === "int") {
+            type = "int";
+          } else {
+            type = "string";
+          }
+          var alias = data.theme_meta[theme_keys[i]].alias;
+
+          theme_columns[i] = {
+            id: theme_keys[i],
+            alias: alias,
+            dataType: tableau.dataTypeEnum[type],
+          };
         }
-        var alias = data.theme_meta[theme_keys[i]].alias;
- 
-        theme_columns[i] = {
-          id: theme_keys[i],
-          alias: alias,
-          dataType: tableau.dataTypeEnum[type],
+        console.log("made it to theme schema");
+        var tableSchemaTheme = {
+          id: "yogi_themes",
+          alias: "Yogi Themes",
+          columns: theme_columns,
         };
+
+        //Create Left Join for Posts and Themes
+        console.log("made it to data join");
+        var standardConnection = {
+          alias: "Joined Yogi Posts and Themes data",
+          tables: [
+            {
+              id: "yogi_posts",
+              alias: "Yogi Posts",
+            },
+            {
+              id: "yogi_themes",
+              alias: "Yogi Themes",
+            },
+          ],
+          joins: [
+            {
+              left: {
+                tableAlias: "Yogi Posts",
+                columnId: "post_uuid",
+              },
+              right: {
+                tableAlias: "Yogi Themes",
+                columnId: "post_uuid",
+              },
+              joinType: "left",
+            },
+          ],
+        };
+
+        schemaCallback([tableSchemaPost, tableSchemaTheme], [standardConnection]);
       }
-      console.log("made it to theme schema");
-
-      var tableSchemaTheme = {
-        id: "yogi_themes",
-        alias: "Yogi Themes",
-        columns: theme_columns,
-      };
-
-      //Create Left Join for Posts and Themes
-      console.log("made it to data join");
-      var standardConnection = {
-        alias: "Joined Yogi Posts and Themes data",
-        tables: [
-          {
-            id: "yogi_posts",
-            alias: "Yogi Posts",
-          },
-          {
-            id: "yogi_themes",
-            alias: "Yogi Themes",
-          },
-        ],
-        joins: [
-          {
-            left: {
-              tableAlias: "Yogi Posts",
-              columnId: "post_uuid",
-            },
-            right: {
-              tableAlias: "Yogi Themes",
-              columnId: "post_uuid",
-            },
-            joinType: "left",
-          },
-        ],
-      };
-
-      schemaCallback([tableSchemaPost, tableSchemaTheme], [standardConnection]);
+      else {
+        schemaCallback([tableSchemaPost], []);
+      }
     });
     //JSON response failure
     request.fail(function (data) {
@@ -132,7 +141,12 @@
     var request = $.ajax({
       url: url,
       type: "GET",
-      data: { connector: "tableau" },
+      data: {
+        connector: "tableau",
+        get_theme_sentiments: false,
+        get_post_keywords: false,
+        get_post_sentiment_info: false,
+      },
       contentType: "application/json; charset=utf-8",
       beforeSend: function (request) {
         request.setRequestHeader("Authorization", tableau.connectionData);
@@ -140,12 +154,9 @@
     });
     request.done(function (data) {
       var tableData = [];
-      var post_keys = Object.keys(data.posts[0]);
-      var theme_keys = Object.keys(data.themes[0]);
-      var post_length = data.posts.length;
-      var theme_length = data.themes.length;
-
-      if (table.tableInfo.id == "yogi_posts") {
+      if (table.tableInfo.id === "yogi_posts") {
+        var post_keys = Object.keys(data.posts[0]);
+        var post_length = data.posts.length;
         for (var i = 0; i < post_length; i++) {
           var post_row = data.posts[i];
           var tableRow = {};
@@ -154,7 +165,9 @@
           }
           tableData.push(tableRow);
         }
-      } else if (table.tableInfo.id == "yogi_themes") {
+      } else if (table.tableInfo.id === "yogi_themes") {
+        var theme_keys = Object.keys(data.themes[0]);
+        var theme_length = data.themes.length;
         for (var i = 0; i < theme_length; i++) {
           var theme_row = data.themes[i];
           var tableRow = {};
@@ -164,7 +177,6 @@
           tableData.push(tableRow);
         }
       }
-
       //Append table rows in size of 1000 at a time to avoid overwhelming pipeline
       var row_index = 0;
       var size = 1000;
