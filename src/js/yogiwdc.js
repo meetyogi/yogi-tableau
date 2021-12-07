@@ -51,8 +51,8 @@
       }
       console.log("made it to post schema");
       var tableSchemaPost = {
-        id: "yogi_posts",
-        alias: "Yogi Posts",
+        id: "yogi_ratings_reviews",
+        alias: "Yogi Ratings & Reviews",
         columns: post_columns,
       };
 
@@ -94,11 +94,11 @@
         //Create Left Join for Posts and Themes
         console.log("made it to data join");
         var standardConnection = {
-          alias: "Joined Yogi Posts and Themes data",
+          alias: "Joined Yogi Ratings & Reviews and Themes data",
           tables: [
             {
-              id: "yogi_posts",
-              alias: "Yogi Posts",
+              id: "yogi_ratings_reviews",
+              alias: "Yogi Ratings & Reviews",
             },
             {
               id: "yogi_themes",
@@ -108,7 +108,7 @@
           joins: [
             {
               left: {
-                tableAlias: "Yogi Posts",
+                tableAlias: "Yogi Ratings & Reviews",
                 columnId: "post_uuid",
               },
               right: {
@@ -131,6 +131,7 @@
       alert(
         "Failure, Please re-enter the Project Token or reach out to Yogi Support"
       );
+      schemaCallback([], []);
     });
   };
 
@@ -154,7 +155,7 @@
     });
     request.done(function (data) {
       var tableData = [];
-      if (table.tableInfo.id === "yogi_posts") {
+      if (table.tableInfo.id === "yogi_ratings_reviews") {
         var post_keys = Object.keys(data.posts[0]);
         var post_length = data.posts.length;
         for (var i = 0; i < post_length; i++) {

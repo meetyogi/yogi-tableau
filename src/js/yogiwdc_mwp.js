@@ -29,8 +29,8 @@
       console.log("made it to post schema");
 
       var tableSchemaPost = {
-        id: "yogi_posts",
-        alias: "Yogi Posts",
+        id: "yogi_ratings_reviews",
+        alias: "Yogi Ratings & Reviews",
         columns: post_columns,
       };
       schemaCallback([tableSchemaPost]);
@@ -63,7 +63,7 @@
 
       console.log("made it to data population");
 
-      if (table.tableInfo.id == "yogi_posts") {
+      if (table.tableInfo.id == "yogi_ratings_reviews") {
         console.log("made it to post table data population");
         for (var i = 0; i < post_length; i++) {
           var post_row = data.posts[i];
